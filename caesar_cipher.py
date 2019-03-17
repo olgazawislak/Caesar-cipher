@@ -34,9 +34,9 @@ def is_word(word_list, word):
     Returns: True if word is in word_list, False otherwise
 
     Example:
-    >>> is_word(word_list, 'bat') returns
+    >> is_word(word_list, 'bat') returns
     True
-    >>> is_word(word_list, 'asdf') returns
+    >> is_word(word_list, 'asdf') returns
     False
     """
     word = word.lower()
@@ -55,6 +55,30 @@ def get_story_string():
 
 
 WORDLIST_FILENAME = 'words.txt'
+
+
+def build_shift_dict(shift):
+    """
+    Creates a dictionary that can be used to apply a cipher to a letter.
+    The dictionary maps every uppercase and lowercase letter to a
+    character shifted down the alphabet by the input shift. The dictionary
+    should have 52 keys of all the uppercase letters and all the lowercase
+    letters only.
+
+    shift (integer): the amount by which to shift every letter of the
+    alphabet. 0 <= shift < 26
+
+    Returns: a dictionary mapping a letter (string) to
+             another letter (string).
+    """
+    lower_letters = string.ascii_lowercase
+    shifted_lower = lower_letters[shift:] + lower_letters[:shift]
+
+    upper_letters = string.ascii_uppercase
+    shifted_upper = upper_letters[shift:] + upper_letters[:shift]
+
+    encrypting_dict = dict(zip(lower_letters + upper_letters, shifted_lower + shifted_upper))
+    return encrypting_dict
 
 
 class Message(object):
@@ -88,29 +112,6 @@ class Message(object):
         """
         return self.valid_words[:]
 
-    def build_shift_dict(self, shift):
-        """
-        Creates a dictionary that can be used to apply a cipher to a letter.
-        The dictionary maps every uppercase and lowercase letter to a
-        character shifted down the alphabet by the input shift. The dictionary
-        should have 52 keys of all the uppercase letters and all the lowercase
-        letters only.
-
-        shift (integer): the amount by which to shift every letter of the
-        alphabet. 0 <= shift < 26
-
-        Returns: a dictionary mapping a letter (string) to
-                 another letter (string).
-        """
-        lower_letters = string.ascii_lowercase
-        shifted_lower = lower_letters[shift:] + lower_letters[:shift]
-
-        upper_letters = string.ascii_uppercase
-        shifted_upper = upper_letters[shift:] + upper_letters[:shift]
-
-        encrypting_dict = dict(zip(lower_letters + upper_letters, shifted_lower + shifted_upper))
-        return encrypting_dict
-
     def apply_shift(self, shift):
         """
         Applies the Caesar Cipher to self.message_text with the input shift.
@@ -124,7 +125,7 @@ class Message(object):
              down the alphabet by the input shift
         """
 
-        shift_dict = self.build_shift_dict(shift)
+        shift_dict = build_shift_dict(shift)
         shifted_word = []
         for n in self.message_text:
             if n not in string.punctuation:
@@ -155,7 +156,7 @@ class PlaintextMessage(Message):
         """
         Message.__init__(self, text)
         self.shift = shift
-        self.encrypting_dict = Message.build_shift_dict(self, shift)
+        self.encrypting_dict = build_shift_dict(shift)
         self.message_text_encrypted = Message.apply_shift(self, shift)
 
     def get_shift(self):
@@ -195,7 +196,7 @@ class PlaintextMessage(Message):
         Returns: nothing
         """
         self.shift = shift
-        self.encrypting_dict = Message.build_shift_dict(self, shift)
+        self.encrypting_dict = build_shift_dict(shift)
         self.message_text_encrypted = Message.apply_shift(self, shift)
 
 
