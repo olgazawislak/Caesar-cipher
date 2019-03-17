@@ -81,6 +81,30 @@ def build_shift_dict(shift):
     return encrypting_dict
 
 
+def apply_shift(message_text, shift):
+    """
+    Applies the Caesar Cipher to self.message_text with the input shift.
+    Creates a new string that is self.message_text shifted down the
+    alphabet by some number of characters determined by the input shift
+
+    shift (integer): the shift with which to encrypt the message.
+    0 <= shift < 26
+
+    Returns: the message text (string) in which every character is shifted
+         down the alphabet by the input shift
+    """
+
+    shift_dict = build_shift_dict(shift)
+    shifted_word = []
+    for n in message_text:
+        if n not in string.punctuation:
+            shifted_word.append(shift_dict[n])
+        else:
+            shifted_word.append(n)
+
+    return ''.join(shifted_word)
+
+
 class Message(object):
 
     def __init__(self, text):
@@ -91,7 +115,7 @@ class Message(object):
 
         a Message object has two attributes:
             self.message_text (string, determined by input text)
-            self.valid_words (list, determined using helper function load_words
+            self.valid_words (list, determined using helper function load_words)
         """
         self.message_text = text
         self.valid_words = load_words(WORDLIST_FILENAME)
@@ -111,29 +135,6 @@ class Message(object):
         Returns: a COPY of self.valid_words
         """
         return self.valid_words[:]
-
-    def apply_shift(self, shift):
-        """
-        Applies the Caesar Cipher to self.message_text with the input shift.
-        Creates a new string that is self.message_text shifted down the
-        alphabet by some number of characters determined by the input shift
-
-        shift (integer): the shift with which to encrypt the message.
-        0 <= shift < 26
-
-        Returns: the message text (string) in which every character is shifted
-             down the alphabet by the input shift
-        """
-
-        shift_dict = build_shift_dict(shift)
-        shifted_word = []
-        for n in self.message_text:
-            if n not in string.punctuation:
-                shifted_word.append(shift_dict[n])
-            else:
-                shifted_word.append(n)
-
-        return ''.join(shifted_word)
 
 
 class PlaintextMessage(Message):
@@ -157,7 +158,7 @@ class PlaintextMessage(Message):
         Message.__init__(self, text)
         self.shift = shift
         self.encrypting_dict = build_shift_dict(shift)
-        self.message_text_encrypted = Message.apply_shift(self, shift)
+        self.message_text_encrypted = apply_shift(self.message_text, shift)
 
     def get_shift(self):
         """
@@ -197,7 +198,7 @@ class PlaintextMessage(Message):
         """
         self.shift = shift
         self.encrypting_dict = build_shift_dict(shift)
-        self.message_text_encrypted = Message.apply_shift(self, shift)
+        self.message_text_encrypted = apply_shift(shift)
 
 
 class CiphertextMessage(Message):
@@ -230,13 +231,22 @@ class CiphertextMessage(Message):
         and the decrypted message text using that shift value
         """
 
+    def decrypt_message_shift(self, shift):
+        """
+        Decrypt self.message_text when shift is known.
+        :param shift
+        :return: string - decrypted message
+        """
+
+        return apply_shift(self.message_text, 26-shift)
+
 
 # Example test case (PlaintextMessage)
-plaintext = PlaintextMessage('hello', 2)
-print('Expected Output: jgnnq')
-print('Actual Output:', plaintext.get_message_text_encrypted())
-
-# Example test case (CiphertextMessage)
-ciphertext = CiphertextMessage('jgnnq')
-print('Expected Output:', (24, 'hello'))
-print('Actual Output:', ciphertext.decrypt_message())
+# plaintext = PlaintextMessage('hello', 2)
+# print('Expected Output: jgnnq')
+# print('Actual Output:', plaintext.get_message_text_encrypted())
+#
+# # Example test case (CiphertextMessage)
+# ciphertext = CiphertextMessage('jgnnq')
+# print('Expected Output:', (24, 'hello'))
+# print('Actual Output:', ciphertext.decrypt_message())
