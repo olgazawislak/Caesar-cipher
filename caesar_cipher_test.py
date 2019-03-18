@@ -12,9 +12,14 @@ class TestMessageMethods(unittest.TestCase):
     def test_apply_shift(self):
         self.assertEqual(apply_shift("Hello!", 3), "Khoor!")
 
+    def test_apply_shift_sentence(self):
+        self.assertEqual(apply_shift("Hello! Nice to see you xyz.", 3), "Khoor! Qlfh wr vhh brx abc.")
+
     def test_decrypt_message_shift(self):
         encrypted_message = CiphertextMessage("Khoor!")
         self.assertEqual(encrypted_message.decrypt_message_shift(3), "Hello!")
+
+    # def test_decrypt_message(self):
 
 
 

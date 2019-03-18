@@ -95,14 +95,15 @@ def apply_shift(message_text, shift):
     """
 
     shift_dict = build_shift_dict(shift)
-    shifted_word = []
+    shifted_word = ''
     for n in message_text:
-        if n not in string.punctuation:
-            shifted_word.append(shift_dict[n])
-        else:
-            shifted_word.append(n)
+        if n in string.punctuation or n == ' ':
+            shifted_word += n
 
-    return ''.join(shifted_word)
+        else:
+            shifted_word += shift_dict[n]
+
+    return shifted_word
 
 
 class Message(object):
@@ -223,13 +224,14 @@ class CiphertextMessage(Message):
         the message, then we would expect 26 - s to be the best shift value
         for decrypting it.
 
-        Note: if multiple shifts are  equally good such that they all create
+        Note: if multiple shifts are equally good such that they all create
         the maximum number of you may choose any of those shifts (and their
         corresponding decrypted messages) to return
 
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         """
+
 
     def decrypt_message_shift(self, shift):
         """
