@@ -239,9 +239,9 @@ class CiphertextMessage(Message):
             for word in message.split(" "):
                 if word in self.valid_words:
                     count += 1
-                if count > max_real_words:
-                    max_real_words += count
-                    best_shift = shift
+            if count > max_real_words:
+                max_real_words = count
+                best_shift = shift
         dec_message = (best_shift, apply_shift(self.message_text, 26-best_shift))
 
         return dec_message
