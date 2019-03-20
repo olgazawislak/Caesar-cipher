@@ -199,7 +199,7 @@ class PlaintextMessage(Message):
         """
         self.shift = shift
         self.encrypting_dict = build_shift_dict(shift)
-        self.message_text_encrypted = apply_shift(shift)
+        self.message_text_encrypted = apply_shift(self.message_text, shift)
 
 
 class CiphertextMessage(Message):
@@ -231,7 +231,20 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         """
+        max_real_words = 0
+        best_shift = 0
+        for shift in range(26):
+            message = apply_shift(self.message_text, 26-shift)
+            count = 0
+            for word in message.split(" "):
+                if word in self.valid_words:
+                    count += 1
+                if count > max_real_words:
+                    max_real_words += count
+                    best_shift = shift
+        dec_message = (best_shift, apply_shift(self.message_text, 26-best_shift))
 
+        return dec_message
 
     def decrypt_message_shift(self, shift):
         """

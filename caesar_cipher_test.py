@@ -1,6 +1,6 @@
 import unittest
 
-from caesar_cipher import build_shift_dict, CiphertextMessage, apply_shift
+from caesar_cipher import build_shift_dict, CiphertextMessage, apply_shift, load_words, WORDLIST_FILENAME
 
 
 class TestMessageMethods(unittest.TestCase):
@@ -19,8 +19,13 @@ class TestMessageMethods(unittest.TestCase):
         encrypted_message = CiphertextMessage("Khoor!")
         self.assertEqual(encrypted_message.decrypt_message_shift(3), "Hello!")
 
-    # def test_decrypt_message(self):
+    def test_decrypt_message_shift_sentence(self):
+        encryp_message = CiphertextMessage("Khoor! Qlfh wr vhh brx abc.")
+        self.assertEqual(encryp_message.decrypt_message_shift(3), "Hello! Nice to see you xyz.")
 
+    def test_decrypt_message(self):
+        message = CiphertextMessage("Khoor! Qlfh wr vhh brx abc.")
+        self.assertEqual(message.decrypt_message(), (3, "Hello! Nice to see you xyz."))
 
 
 if __name__ == '__main__':
