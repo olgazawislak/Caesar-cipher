@@ -242,7 +242,7 @@ class CiphertextMessage(Message):
             if count > max_real_words:
                 max_real_words = count
                 best_shift = shift
-        dec_message = (best_shift, apply_shift(self.message_text, 26-best_shift))
+        dec_message = (26-best_shift, apply_shift(self.message_text, 26-best_shift))
 
         return dec_message
 
@@ -256,12 +256,15 @@ class CiphertextMessage(Message):
         return apply_shift(self.message_text, 26-shift)
 
 
-# Example test case (PlaintextMessage)
-# plaintext = PlaintextMessage('hello', 2)
-# print('Expected Output: jgnnq')
-# print('Actual Output:', plaintext.get_message_text_encrypted())
-#
-# # Example test case (CiphertextMessage)
-# ciphertext = CiphertextMessage('jgnnq')
-# print('Expected Output:', (24, 'hello'))
-# print('Actual Output:', ciphertext.decrypt_message())
+def decrypt_story():
+    """
+    :return: decrypted story from file story.txt
+    """
+    story = CiphertextMessage(get_story_string())
+    decrypted_story = story.decrypt_message()
+    return decrypted_story
+
+
+
+
+

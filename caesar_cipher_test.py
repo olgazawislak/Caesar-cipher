@@ -25,7 +25,7 @@ class TestMessageMethods(unittest.TestCase):
 
     def test_decrypt_message(self):
         message = CiphertextMessage("Khoor! Qlfh wr vhh brx abc.")
-        self.assertEqual(message.decrypt_message(), (3, "Hello! Nice to see you xyz."))
+        self.assertEqual(message.decrypt_message(), (23, "Hello! Nice to see you xyz."))
 
 
 if __name__ == '__main__':
